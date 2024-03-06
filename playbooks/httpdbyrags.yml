@@ -1,0 +1,20 @@
+---
+- name: Setup apache server
+  hosts: localhost
+  become: yes
+  vars:
+    ansible_python_interpreter: /usr/bin/python3  
+  
+  tasks:
+  - name: Install httpd
+    apt:
+      name: apache2
+      state: present
+      update_cache: yes
+    tags: i-httpd
+
+  - name: Start httpd
+    service:
+      name: apache2
+      state: started
+    tags: s-httpd

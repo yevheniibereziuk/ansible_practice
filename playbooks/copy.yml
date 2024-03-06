@@ -1,0 +1,11 @@
+---
+
+- name: Copy file from localhost to remote clients
+  hosts: all
+
+  tasks:
+  - name: Copying files
+    become: true
+    copy:
+     src: /home/yevhenii/Desktop/Ansible/playbooks/some.cfg
+     dest: /tmp

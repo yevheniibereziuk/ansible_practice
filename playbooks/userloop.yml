@@ -1,0 +1,14 @@
+---
+- name: Create users
+  hosts: localhost
+  become: yes
+  tasks:
+  - name: Create jerry
+    user:
+      name: jerry
+  - name: Create kramer
+    user:
+      name: kramer
+  - name: Create eliane
+    user:
+      name: eliane

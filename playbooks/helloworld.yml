@@ -1,0 +1,8 @@
+---
+
+- name: my second playbook
+  hosts: localhost
+  
+  tasks:
+  - name: Pront Hello world
+    debug: msg="Hello world"

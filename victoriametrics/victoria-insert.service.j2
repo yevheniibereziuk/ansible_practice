@@ -1,0 +1,30 @@
+[Unit]
+Description=VictoriaMetrics Insert Service
+After=network.target
+
+[Service]
+EnvironmentFile={{ environment_file_path }}/{{ vm_role }}
+ExecStart={{ path_to_victoria_insert_binary }} \
+  {% if use_environment == "true" %}
+    -envflag.enable=true
+  {% else %}
+    {% for item in vminsert_params %}
+      -{{ item.param }}={{ item.value }} \
+    {% endfor %}
+    {% for host in groups['victoriametrics'] %}
+      -storageNode={{ hostvars[host]['ansible_host'] }}:8400 \
+    {% endfor %}
+    {% if use_environment == "false" %}
+      -envflag.enable=false
+    {% else %}
+      -envflag.enable=true
+    {% endif %}
+  {% endif %}
+
+Restart=always
+User={{ ec2-user }}
+Group={{ ec2-user }}
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target

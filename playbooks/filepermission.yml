@@ -1,0 +1,10 @@
+---
+
+- name: Change file permissions
+  hosts: all
+ 
+  tasks:
+  - name: File permissions
+    file:
+     path: /home/ec2-user/linux2
+     mode: a+w

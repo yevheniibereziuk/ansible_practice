@@ -1,0 +1,14 @@
+---
+- name:  Add or update user password
+  hosts: all
+  become: yes
+  vars:
+    ansible_python_interpreter: /usr/bin/python3  
+
+
+  tasks:
+  - name: Change "yevhenii" password
+    user:
+      name: yevhenii
+      update_password: always
+      password: "{{ newpassword|password_hash('sha512') }}"

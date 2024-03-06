@@ -1,0 +1,27 @@
+---
+- name: Install VictoriaMetrics
+  hosts: victoriametrics
+  become: yes
+
+  tasks:
+    - name: Download VictoriaMetrics
+      get_url:
+	url: https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/v{{ victoria_metrics_version }}/victoria-metrics-linux-amd64-v{{ victoria_metrics_version }}-cluster.tar.gz
+        dest: /tmp
+    - name: Extract VictoriaMetrics
+      unarchive:
+        src: /tmp/victoria-metrics-linux-amd64-v{{ victoria_metrics_version }}-cluster.tar.gz
+        dest: /opt
+        remote_src: yes
+    - name: Run VictoriaMetrics
+      shell: "/opt/victoria-metrics-linux-amd64-v{{ victoria_metrics_version }}-cluster/victoria-metrics -storageDataPath /var/lib/victoria-metrics-data"
+      async: 31536000  # запуск назавжди
+      poll: 0
+
+
+
+
+
+
+
+

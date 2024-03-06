@@ -1,0 +1,38 @@
+- name: Setup httpd and open firewall port
+  hosts: all
+  become: yes
+  vars:
+    ansible_python_interpreter: /usr/bin/python3  
+  tasks:
+    - name: Install apache package
+      dnf:
+        name: httpd
+        state: present
+
+    - name: Start httpd
+      service:
+        name: httpd
+        state: started
+
+    - name: Install firewalld
+      dnf:
+        name: firewalld
+        state: present
+
+    - name: Ensure firewalld service is running
+      service:
+        name: firewalld
+        state: started
+
+    - name: Open port 80 for http access
+      command:
+        cmd: firewall-cmd --permanent --add-service=http
+        warn: no
+      register: firewall_result
+      changed_when: "'success' in firewall_result.stdout"
+      failed_when: "'Error' in firewall_result.stderr"
+
+    - name: Reload firewalld
+      command:
+        cmd: firewall-cmd --reload
+        warn: no

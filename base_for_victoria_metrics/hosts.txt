@@ -1,0 +1,6 @@
+[victoriametrics]
+VICTORIA01 ansible_host=18.194.173.221 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ec2-user/.ssh/ansible.pem
+VICTORIA02 ansible_host=3.70.224.254 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ec2-user/.ssh/ansible.pem
+VICTORIA03 ansible_host=3.70.100.235 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ec2-user/.ssh/ansible.pem
+
+

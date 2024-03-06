@@ -1,0 +1,4 @@
+---
+vminsert_params:
+  - param: replicationFactor
+    value: 1

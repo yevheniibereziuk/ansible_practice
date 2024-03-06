@@ -1,0 +1,76 @@
+---
+- name: Install and Configure VictoriaMetrics Cluster
+  hosts: victoriametrics
+  become: yes
+  vars:
+    victoriametrics_version: "v1.94.0"
+    download_url: "https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/{{ victoriametrics_version }}/victoria-metrics-linux-amd64-{{ victoriametrics_version }}-cluster.tar.gz"
+    install_dir: "/opt/victoriametrics"
+    data_dir: "/var/lib/victoriametrics"
+    config_dir: "/etc/victoriametrics"
+    environment_file_path: "/etc/victoriametrics"
+    vm_role: "victoria-insert"
+    path_to_victoria_insert_binary: "/opt/victoriametrics/vminsert-prod"
+    use_environment: false
+  tasks:
+    - name: Install Required Packages
+      dnf:
+        name:
+          - wget
+          - tar
+        state: present
+    - name: Ensure VictoriaMetrics Install Directory Exists
+      file:
+        path: "{{ install_dir }}"
+        state: directory
+        mode: 0755
+      
+    - name: Download and Extract VictoriaMetrics Binary
+      unarchive:
+        src: "{{ download_url }}"
+        dest: "{{ install_dir }}"
+        remote_src: yes
+        mode: 0755
+        
+    - name: Create Data and Config Directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+      loop:
+        - "{{ data_dir }}"
+        - "{{ config_dir }}"
+        
+    - name: Set Up Configuration File (example)
+      copy:
+        content: |
+          # Your VictoriaMetrics configuration here
+        dest: "{{ config_dir }}/victoriametrics.yml"
+        mode: 0644
+        
+    - name: Set Up Systemd Service File
+      template:
+        src: victoria-insert.service.j2
+        dest: "/etc/systemd/system/victoriametrics.service"
+        mode: 0644
+      notify: Restart VictoriaMetrics
+      
+    - name: Start and Enable VictoriaMetrics Service
+      systemd:
+        name: victoriametrics
+        enabled: yes
+        state: started
+        
+  handlers:
+    - name: Restart VictoriaMetrics
+      systemd:
+        name: victoriametrics
+        state: restarted
+
+
+
+
+
+
+
+

@@ -1,0 +1,8 @@
+---
+
+- name: "First playbook"
+  hosts: localhost
+  
+  tasks:
+  - name: "test connectivity"
+    ping:
